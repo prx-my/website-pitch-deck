@@ -1,6 +1,6 @@
 ---
 name: website-pitch-deck
-description: Build a web-agency sales pitch deck from a prospect's website URL (optionally with notes or voice notes about the prospect). Researches the live site, captures real screenshots, scores it, and publishes a slide deck that shows where the site falls short and what the new site would do instead. Use when the user sends a business website and asks for a pitch deck, sales deck, audit deck or teardown deck.
+description: Build a web-agency sales pitch deck from a prospect's website URL, or from their Facebook page or listing when they have no website (optionally with notes or voice notes about the prospect). Researches the live site, captures real screenshots, scores it, and publishes a slide deck that shows where the site falls short and what the new site would do instead. Use when the user sends a business website and asks for a pitch deck, sales deck, audit deck or teardown deck.
 ---
 
 # Website pitch deck
@@ -119,6 +119,42 @@ Slides 3–9 share one layout. The left side (860px) holds a screenshot or table
 ### Speaker notes
 
 Each slide ends with an `<aside>`: 3–6 sentences in the presenter's voice, addressed to the owner by first name. Cover the evidence, why it costs calls, what the new site does, and any question to ask (for example "which warranty do you actually offer?"). End with the service labels in square brackets.
+
+## When the prospect has no website
+
+Sometimes the "URL" is a Facebook page, a Google Business Profile or a directory listing. The deck then sells a first website, and the evidence comes from wherever the business does appear.
+
+**Research instead of Step 1:**
+- **Their social page, logged out:** screenshot it at 1440×900 and with `cdp-shot.mjs` as a 390-wide phone viewport. Record what a stranger sees: log-in walls or "open app" prompts, follower and post counts, the contact line, any hours or address.
+- **Listings:** BBB (service area, rating, address), Google Business Profile, Angi/HomeAdvisor, Yelp. Note when listings disagree on address or hours.
+- **Search checks:** "<service> <town>" for the home town and 3–5 nearby towns, using an AI web-search tool. Record who comes up and whether the prospect appears, and how (e.g. "via BBB listing only"). Google often answers headless requests with a CAPTCHA: never try to get around it, just use another tool and label every result "indicative, not Google rankings".
+- **Competitors:** who has their own pages per town or service, and their review counts with the source labelled.
+- **Brand:** with no site CSS, take colours from the logo, the social page, or the mockup if one exists.
+
+**If a homepage mockup already exists** (see `agency.md`'s mockup workflow), it's the strongest evidence you have:
+- Screenshot it on desktop and on a phone.
+- Run Lighthouse on its live URL twice and show those measured scores, labelled with the date and "run locally".
+- Be honest about its own gaps (a single page, a menu that only scrolls, no FAQ yet) by listing them under "Added in the full site".
+
+If there's no mockup, the scores slide shows targets instead.
+
+**Slide spine (11):**
+
+| # | id | Title pattern | Visual |
+|---|----|------|------|
+| 1 | cover | "You do the work. Online, it's hard to find." | Dark panel, both logos, one of their own job photos (from their social page) on the right |
+| 2 | report | "<Name> online today, scored" | Rows: website (none), social page, searches nearby, town × service pages (0 of N), reviews, estimate request, hours, location, plus one true pass (e.g. BBB rating) |
+| 3 | social | "Your Facebook page asks visitors to log in first" (when true) | Logged-out screenshot + strip: followers, posts, what phones see |
+| 4 | search | "Search for <service> nearby, and competitors show up instead" | Table: town / what came up / the prospect ("Via BBB listing only", "Not named") |
+| 5 | coverage | "0 of N town-and-service pages exist" | Towns × services grid, every cell "No page"; towns from their listing, marked "to confirm" |
+| 6 | reviews | "Competitors show their reviews. <Name> has none to show yet." | Card grid: the prospect vs 4–5 competitors, sources labelled |
+| 7 | mockup | "Your new homepage is already built" | Desktop + phone screenshots of the mockup; "What's on it" / "Added in the full site" |
+| 8 | scores | "Your new homepage already scores 100" (only if measured) | 4 score cards from the live mockup; "Today: no website to score" |
+| 9 | addon | "Optional add-on: an answer while you're on a job" | Their phone screenshot + how customers reach them today |
+| 10 | offer | "The new <Name> website" | Included / Optional add-on; next step: walk through the homepage, confirm towns, hours and address |
+| 11 | sources | "Sources" | What was checked, how, and what isn't verified |
+
+Skip the menu, sitemap and live-site Lighthouse slides: there's nothing to measure. Never say the prospect is invisible when they turn up through directories; say how they turn up.
 
 ## Step 4: check, then publish
 

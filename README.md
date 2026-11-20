@@ -35,6 +35,12 @@ A [Claude Code](https://claude.com/claude-code) skill for web agencies. It audit
 5. **Checks its own work.** It renders every slide locally (`scripts/render_check.py`) and fixes overflow before anything is published.
 6. **Writes speaker notes** for every slide: the evidence, why it costs calls, what changes, and what to ask the owner.
 
+**No website yet?** Give it the business's Facebook page or listing instead. It switches to a first-website pitch:
+- what a stranger sees on their social page
+- who shows up when people search their towns
+- a coverage grid of pages that don't exist yet
+- if a homepage mockup is already built, its measured Lighthouse scores
+
 ## Honest by design
 
 A pitch deck that overclaims gets caught in the first meeting. These rules are built into the skill:
