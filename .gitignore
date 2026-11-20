@@ -1,0 +1,8 @@
+# your private agency details and logo
+agency.md
+logo*.png
+!examples/assets/*.png
+# working files
+.DS_Store
+__pycache__/
+scratch/
