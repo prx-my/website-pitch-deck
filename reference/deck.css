@@ -106,10 +106,13 @@ section.cover { background: #081733; }
 .menu-table .new { color: #0053A5; }
 .nav-shot { width: 860px; height: 48px; object-fit: contain; background: #FFFFFF; border: 1px solid #DCDCD8; border-radius: 8px; }
 .wide-right { width: 616px; display: flex; flex-direction: column; gap: 32px; }
-.score-row { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 24px; }
-.score-card { background: #F8F8F7; border-radius: 12px; padding: 24px 28px; display: flex; flex-direction: column; gap: 6px; }
-.sc-label { font-size: 26px; font-weight: 700; color: #15284B; margin: 0; }
-.sc-today { font-family: 'Barlow Condensed', 'Arial Narrow', Arial, sans-serif; font-size: 96px; font-weight: 800; line-height: 1; color: #15284B; margin: 0; }
-.sc-today.bad { color: #BE222A; }
-.sc-target { font-size: 26px; font-weight: 600; color: #0053A5; margin: 0; }
+/* scores: today vs the new site, Lighthouse colours (90+ green, 50-89 orange, under 50 red).
+   The number is SVG <text>, not an overlaid <p>: overlays drift off-centre in some viewers. */
+.sc-row { display: flex; align-items: center; gap: 24px; padding: 18px 0; border-top: 2px solid #DCDCD8; }
+.sc-head { width: 440px; display: flex; flex-direction: column; gap: 8px; }
+.sc-name { font-size: 32px; font-weight: 700; color: #15284B; margin: 0; }
+.sc-sub { font-size: 24px; color: #34322D; margin: 0; }
+.ring { width: 290px; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.ring-l { font-size: 28px; font-weight: 700; color: #15284B; margin: 0; }
+.sc-none { flex: 1; height: 190px; box-sizing: border-box; border: 3px dashed #DCDCD8; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 44px; font-weight: 800; color: #BE222A; margin: 0; }
 .two-blk { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }

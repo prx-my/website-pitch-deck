@@ -28,7 +28,7 @@ A [Claude Code](https://claude.com/claude-code) skill for web agencies. It audit
    - which town × service pages exist, from the sitemap
    - FAQ and schema, the reviews block, booking widgets, hours, trust proof
    - brand colours and fonts from the compiled CSS
-   - Lighthouse scores, listings, competitors, and indicative AI-answer checks
+   - Lighthouse scores (3–5 runs, middle value), technical basics (sitemap, robots.txt, titles, favicon, share image, business email), listings, competitors, and indicative AI-answer checks
 2. **Captures evidence.** Headless Chrome screenshots of the hero, the mobile header, the reviews block and the footer hours, cropped to the exact section (`scripts/cdp-shot.mjs`).
 3. **Takes notes in any form.** Typed notes, or voice notes transcribed locally with whisper.cpp. Promises already made to the prospect end up in the deck.
 4. **Builds the deck in the prospect's own brand:** their colours, their fonts, their logo. Your agency's accent appears only on the footer mark and the call-to-action.
@@ -86,6 +86,7 @@ SKILL.md              the playbook Claude follows
 agency.example.md     template for your private agency.md
 reference/            finished example deck: deck.json, deck.css, slides/*.html
 scripts/cdp-shot.mjs  section screenshots over the Chrome DevTools Protocol
+scripts/lighthouse_runs.py  Lighthouse several times: middle score and range
 scripts/render_check.py  local render + contact sheets for overflow checks
 examples/             fictional site and assets used to render the example
 docs/                 the images in this README

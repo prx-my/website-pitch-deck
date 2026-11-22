@@ -11,7 +11,7 @@ You build a sales deck for a web agency pitching a **new website** to a local bu
 
 - `agency.md` in `<skill-dir>` holds the agency's name, presenter, contact details, accent colour and proof points. If it's missing, copy `agency.example.md`, ask the user for the real values, and do not publish a deck with the example's placeholder agency.
 - `reference/` is a finished 11-slide deck for a **fictional** roofing company (`deck.json`, `deck.css`, `slides/*.html`). Use its CSS and markup as the template. Its `/_blob/ASSET_*` image names are placeholders: replace them with your own uploads.
-- `scripts/cdp-shot.mjs` captures section screenshots; `scripts/render_check.py` renders the deck locally so you can catch overflow before publishing.
+- `scripts/cdp-shot.mjs` captures section screenshots; `scripts/lighthouse_runs.py` runs Lighthouse several times and reports the middle score and range; `scripts/render_check.py` renders the deck locally so you can catch overflow before publishing.
 
 ## What the deck must do
 
@@ -30,7 +30,7 @@ You build a sales deck for a web agency pitching a **new website** to a local bu
    ```
    Anything the notes say the agency already promised the prospect ("every menu link gets its own page", "we'll add an FAQ", "keep his colours") must show up in the deck.
 3. The prospect owner's first name, for "Prepared for …". Never invent staff names.
-4. Which offers are confirmed. An unconfirmed offer stays as a visible `[CONFIRM: …]` placeholder.
+4. Which offers are confirmed. An unconfirmed offer stays off the slides: list it in the speaker notes and under "Still to confirm" on the sources slide.
 
 ## Step 1: research the live site (facts only)
 
@@ -39,7 +39,8 @@ Keep a fact sheet with the source of every fact. Work in a scratch folder.
 - **Homepage HTML** (`curl -sSL <url>`): menu links in `<header>` (how many are `#anchors` that only scroll the homepage vs real pages), H1 and hero wording, whether the phone number shows digits or only an icon, FAQ or `FAQPage` schema, the reviews block (rating? count? dates?), the booking widget (how many copies), hours, and trust proof (warranty, manufacturer certification, financing, BBB, licence).
 - **Sitemap** (`curl -sSL <url>/sitemap.xml | grep -oE '<loc>[^<]+'`): build the **town × service grid** showing which combinations have a page, plus odd pages (out-of-area towns, recruiting pages).
 - **Brand:** exact hex colours from the compiled CSS (`:root` variables, button and CTA classes, `<meta name="theme-color">`), fonts from the Google Fonts `<link>`, and the logo URL.
-- **Scores:** Lighthouse mobile, twice. If Google PageSpeed Insights is rate-limited, run Lighthouse locally and label every score "local Lighthouse mobile run". If SEO or Best Practices score 100, say so: they're technical checks, so the deck must not call them weak.
+- **Scores:** Lighthouse mobile, 3–5 runs: `python3 -I <skill-dir>/scripts/lighthouse_runs.py <url> 5`. Show the middle value and state the range: Performance can swing 20 points between runs and between days. Label every score "local Lighthouse mobile run" with the date, and rerun just before presenting. If SEO or Best Practices score 100, say so: they're technical checks, so the deck must not call them weak.
+- **Technical basics** (each one is a report-card row when it fails): `/robots.txt` and `/sitemap.xml` (a 200 that returns the homepage HTML means missing), a made-up URL (a 200 instead of 404 means missing pages report "OK" to search engines), a unique `<title>` per page, `<link rel="icon">` or `/favicon.ico` (HTML instead of an image means no tab icon), `og:image` (shared links show no photo), the business email (a Gmail or Yahoo address instead of their own domain), and whether the raw HTML has the content or only an empty app container.
 - **Listings and reviews:** Google rating and count if findable, plus Yelp, Angi/HomeAdvisor, Houzz, BBB and Facebook. Note conflicting hours. Never invent a rating: if you can't find one, write "Not found in our check".
 - **Competitors (3–6 local):** displayed rating and count with the source labelled ("As displayed", "Places data", "Own site claim"), plus 24/7 claims, warranties and certifications.
 - **AI-answer check:** ask an AI search tool for the service in the home town and in 3 neighbouring towns, and record who gets named. Always label it "Indicative checks, not Google rankings".
@@ -89,18 +90,20 @@ Frames worth having: desktop hero, mobile hero with header and sticky bar, menu 
 | # | id | Title pattern (uppercase, at most 2 lines at 72px) | Visual |
 |---|----|------|------|
 | 1 | cover | "Where your website falls short, and the site we'll build instead" | Dark brand background, both logos, "Prepared for <Owner> · <Company> · <Month Year>" |
-| 2 | report | "Your website's report card" | Table with columns Area / today / the new site. Today is red, or green for a true pass; the new site is blue. 8–10 rows: speed, accessibility, menu, town × service pages, FAQ, reviews, trust proof, hours, AI answers |
-| 3 | menu | "Your menu scrolls the homepage instead of opening pages" (when true) | Menu-bar screenshot + table: link / today / new site |
-| 4 | coverage | "Only N of M town-and-service pages exist" | Grid table of towns × services, "Page" (green) / "No page" (red) |
-| 5 | homepage | The real hero problem, e.g. "Your homepage speaks to one kind of job" | Desktop hero screenshot with a red flag + strip of what competitors show |
-| 6 | reviews | e.g. "Neighbours show stars. You show undated quotes." | Reviews-block screenshot + strip: prospect vs 3 competitors, each source labelled |
-| 7 | scores | "The scores we'll build the new site to" | 4 cards (Performance, Accessibility, Best Practices, SEO): today vs "Target: 100"; what costs points; "your mockup goes through the same test" |
+| 2 | report | "Your website's report card" | Table with columns Area / today / the new site. Today is red, or green for a true pass; the new site is blue. 10–12 rows, one line each: speed, accessibility, menu, town × service pages, FAQ, reviews, trust proof, hours, AI answers, plus every failed technical basic |
+| 3 | scores | "How Google's own test scores your site today" | Two rows of 4 score rings (Performance, Accessibility, Best Practices, SEO): the live site today, then the new site (measured mockup, or "Target: 100"). Ring and number in Lighthouse colours: 90+ green, 50–89 orange, under 50 red |
+| 4 | menu | "Your menu scrolls the homepage instead of opening pages" (when true) | Menu-bar screenshot + table: link / today / new site |
+| 5 | coverage | "Only N of M town-and-service pages exist" | Grid table of towns × services, "Page" (green) / "No page" (red) |
+| 6 | homepage | The real hero problem, e.g. "Your homepage speaks to one kind of job" | Desktop hero screenshot with a red flag + strip of what competitors show |
+| 7 | reviews | e.g. "Neighbours show stars. You show undated quotes." | Reviews-block screenshot + strip: prospect vs 3 competitors, each source labelled |
 | 8 | nearby | "In N neighbouring towns, AI answers name someone else" | Table town / AI answer + "Named instead" strip |
 | 9 | addon | "Optional add-on: …" | Evidence screenshot + problem / optional add-on |
 | 10 | offer | "The new <domain>" | Included in the new site / Optional add-on; dark band with the next step, CTA button, presenter contact, both logos, agency proof |
 | 11 | sources | "Sources" | Pages checked and when, competitors, agency pages, benchmarks, "Not verified" |
 
-Slides 3–9 share one layout. The left side (860px) holds a screenshot or table. The right side holds two blocks with 3–4 short bullets each: a red-ruled **"What's missing"** and a blue-ruled **"What the new site does"**. Drop any slide whose gap doesn't exist for this prospect, and add one if the research turns up a bigger gap.
+The report card and the scores come first so the owner sees the whole picture, and the numbers, in the first minute. Copy the score rings from `reference/slides/scores.html`: the number is SVG `<text>`, because a `<p>` laid over the ring drifts off-centre in some viewers. The arc length is `2π·80·score/100`.
+
+Slides 4–9 share one layout. The left side (860px) holds a screenshot or table. The right side holds two blocks with 3–4 short bullets each: a red-ruled **"What's missing"** and a blue-ruled **"What the new site does"**. Drop any slide whose gap doesn't exist for this prospect, and add one if the research turns up a bigger gap.
 
 ### Copy rules
 
@@ -111,6 +114,8 @@ Slides 3–9 share one layout. The left side (860px) holds a screenshot or table
 - **Money:** no pricing, budgets or lost-revenue maths.
 - **Legal wording:** for insurance or legal copy, only suggest "match the wording on your own <claim/terms> page". Never cite statutes or call anything illegal, non-compliant or risky.
 - **Reviews and proof:** no negative review quotes on slides. Never invent testimonials, certifications, warranties, financing, awards or client names. The prospect's trust items appear as "once you confirm them".
+- **Who does what with reviews:** the agency shows the prospect's reviews on the site and sets up the profile; asking customers for reviews stays with the owner. Never write that the agency will contact the prospect's customers.
+- **No visible placeholders:** no grey "your photo here" boxes, `[CONFIRM]` tags or "TBD" on a slide. A photo slot gets the prospect's own photo, or a generated image labelled "Illustrative image" on the slide and in the sources. Anything unconfirmed goes in the speaker notes and the sources slide.
 - **Agency proof:** only from `agency.md`'s Proof list. Items under "Offered but not published" stay in the speaker notes.
 - **Style:**
   - no eyebrow or kicker labels, emoji, decorative icons, stock photos, purple, tilted cards or animations
@@ -133,7 +138,7 @@ Sometimes the "URL" is a Facebook page, a Google Business Profile or a directory
 
 **If a homepage mockup already exists** (see `agency.md`'s mockup workflow), it's the strongest evidence you have:
 - Screenshot it on desktop and on a phone.
-- Run Lighthouse on its live URL twice and show those measured scores, labelled with the date and "run locally".
+- Run `lighthouse_runs.py` on its live URL and show those measured scores, labelled with the date and "run locally".
 - Be honest about its own gaps (a single page, a menu that only scrolls, no FAQ yet) by listing them under "Added in the full site".
 
 If there's no mockup, the scores slide shows targets instead.
@@ -143,13 +148,13 @@ If there's no mockup, the scores slide shows targets instead.
 | # | id | Title pattern | Visual |
 |---|----|------|------|
 | 1 | cover | "You do the work. Online, it's hard to find." | Dark panel, both logos, one of their own job photos (from their social page) on the right |
-| 2 | report | "<Name> online today, scored" | Rows: website (none), social page, searches nearby, town × service pages (0 of N), reviews, estimate request, hours, location, plus one true pass (e.g. BBB rating) |
-| 3 | social | "Your Facebook page asks visitors to log in first" (when true) | Logged-out screenshot + strip: followers, posts, what phones see |
-| 4 | search | "Search for <service> nearby, and competitors show up instead" | Table: town / what came up / the prospect ("Via BBB listing only", "Not named") |
-| 5 | coverage | "0 of N town-and-service pages exist" | Towns × services grid, every cell "No page"; towns from their listing, marked "to confirm" |
-| 6 | reviews | "Competitors show their reviews. <Name> has none to show yet." | Card grid: the prospect vs 4–5 competitors, sources labelled |
-| 7 | mockup | "Your new homepage is already built" | Desktop + phone screenshots of the mockup; "What's on it" / "Added in the full site" |
-| 8 | scores | "Your new homepage already scores 100" (only if measured) | 4 score cards from the live mockup; "Today: no website to score" |
+| 2 | report | "<Name> online today, scored" | Rows: website (none), social page, searches nearby, town × service pages (0 of N), reviews, photos, estimate request, hours, location, business email, plus one true pass (e.g. BBB rating) |
+| 3 | scores | "Your new homepage already scores 100" (only if measured) | Top row: one dashed panel, "No website, nothing to score" (not four empty rings). Bottom row: 4 score rings from the live mockup |
+| 4 | social | "Your Facebook page asks visitors to log in first" (when true) | Logged-out screenshot + strip: followers, posts, what phones see |
+| 5 | search | "Search for <service> nearby, and competitors show up instead" | Table: town / what came up / the prospect ("Via BBB listing only", "Not named") |
+| 6 | coverage | "0 of N town-and-service pages exist" | Towns × services grid, every cell "No page"; towns from their listing, marked "to confirm" |
+| 7 | reviews | "Competitors show their reviews. <Name> has none to show yet." | Card grid: the prospect vs 4–5 competitors, sources labelled |
+| 8 | mockup | "Your new homepage is already built" | Desktop + phone screenshots of the mockup; "What's on it" / "Added in the full site" |
 | 9 | addon | "Optional add-on: an answer while you're on a job" | Their phone screenshot + how customers reach them today |
 | 10 | offer | "The new <Name> website" | Included / Optional add-on; next step: walk through the homepage, confirm towns, hours and address |
 | 11 | sources | "Sources" | What was checked, how, and what isn't verified |
@@ -173,7 +178,7 @@ Skip the menu, sitemap and live-site Lighthouse slides: there's nothing to measu
    - the link, and that the deck is private until shared
    - that it downloads as PDF or PPTX
    - what was verified and what was left out
-   - any `[CONFIRM]` placeholders still in the deck
+   - what is still to confirm with the prospect
 
 ## After the deck: the mockup
 
