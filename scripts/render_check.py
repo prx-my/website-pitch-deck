@@ -32,9 +32,11 @@ for sid in deck["order"]:
     html = open(f"{root}/project/slides/{sid}.html").read()
     for k, v in blob_map.items():
         html = html.replace(f"/_blob/{k}", f"file://{v}")
-    page = f"{out}/{sid}.html"
+    page = os.path.abspath(f"{out}/{sid}.html")  # file:// needs an absolute path
     open(page, "w").write(f"<!doctype html><html><head><meta charset=\"utf-8\">{fonts}<style>{BASE}\n{css}</style></head><body>{html}</body></html>")
-    png = f"{out}/{sid}.png"
+    png = os.path.abspath(f"{out}/{sid}.png")
+    if os.path.exists(png):
+        os.remove(png)  # never let a stale image pass as a fresh render
     for _ in range(2):  # Chrome occasionally exits before writing; one retry is enough
         subprocess.run([CHROME, "--headless=new", "--disable-gpu", "--hide-scrollbars", "--allow-file-access-from-files",
                         "--virtual-time-budget=6000", "--window-size=1920,1080", f"--screenshot={png}", f"file://{page}"],
